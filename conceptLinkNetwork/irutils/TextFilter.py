@@ -6,6 +6,7 @@ Created on 25/gen/2012
 
 from nltk.stem.porter import PorterStemmer
 import nltk
+from nltk.tokenize.treebank import TreebankWordTokenizer
 import re
 
 stopwords_file = "stop_words.txt"
@@ -22,13 +23,14 @@ class TextFilter(object):
         Constructor
         '''
         self.stopwords = open(stopwords_file, 'r').read().split()
+        self.wordTokenizer = TreebankWordTokenizer()
         
     def remove_stopwords(self, string_text):
         """
         The function takes a string as input and returns a string
         without the stopwords
         """
-        tokens = nltk.word_tokenize(string_text)
+        tokens = self.wordTokenizer.tokenize(string_text)
         filteredtext = ' '.join([t for t in tokens if t.lower() not in self.stopwords])
         return filteredtext
 
@@ -43,7 +45,7 @@ class TextFilter(object):
         """
         remove charachter @param item from the string
         """
-        tokens = nltk.word_tokenize(string_text)
+        tokens = self.wordTokenizer.tokenize(string_text)
         filteredtext = ' '.join([self.__remove_item_from_term(t, item) for t in tokens])
         return filteredtext
     
@@ -51,7 +53,7 @@ class TextFilter(object):
         """
         The function takes a string as input and returs a string with stemmed words
         """
-        tokens = nltk.word_tokenize(string_text)
+        tokens = self.wordTokenizer.tokenize(string_text)
         stemmer = PorterStemmer()
         stemmedtext = ' '.join([stemmer.stem(t) for t in tokens]) 
         return stemmedtext
@@ -67,7 +69,7 @@ class TextFilter(object):
         """
         Reduce each term in @param string_text to lowecase
         """
-        tokens = nltk.word_tokenize(string_text)
+        tokens = self.wordTokenizer.tokenize(string_text)
         lowercase_string = ' '.join([t.lower() for t in tokens])
         return lowercase_string
 
@@ -75,7 +77,7 @@ class TextFilter(object):
         """
         remove single char items from @param string_text
         """
-        tokens = nltk.word_tokenize(string_text)
+        tokens = self.wordTokenizer.tokenize(string_text)
         no_single_char_string = ' '.join([t for t in tokens if len(t) > 1])
         return no_single_char_string
     
