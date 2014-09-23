@@ -1,10 +1,10 @@
 from SentenceNetVisitor import SentenceNetVisitor
 from XMLReqManager import XMLReqManager
-from SentenceNetCreator import SentenceNetCreator
+from SentenceNet import SentenceNet
 from irutils.TextFilter import TextFilter
 
 
-s1 = SentenceNetCreator()
+s1 = SentenceNet()
 n1 = s1.get_net()
 v1 = SentenceNetVisitor(n1, s1.get_edge_start_weight(), s1.get_start_occurrences_num())
 

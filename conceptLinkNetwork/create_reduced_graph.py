@@ -4,7 +4,7 @@ fp1 and fp2. Then, given a sentence, returns the shortest path
 within each graph together with the subgraphs attached to each node.
 """
 
-from SentenceNetCreator import SentenceNetCreator
+from SentenceNet import SentenceNet
 from SentenceNetVisitor import SentenceNetVisitor
 from irutils.TextFilter import TextFilter
 from pygraph.classes.digraph import digraph
@@ -15,22 +15,22 @@ fp2 = '../docs/gediminas2005.txt'
 fp3 = '../docs/ricci.txt'
 fp4 = '../docs/wikipediagediminas2005.txt'
 
-sentenceNetWiki = SentenceNetCreator()
+sentenceNetWiki = SentenceNet()
 sentenceNetWiki.createNet([fp1])
 sentenceNetWiki.write_graph('wikipedia_graph.gv')
 print 'Wiki size', len(sentenceNetWiki.get_net().nodes())
 
-sentenceNetGediminas = SentenceNetCreator()
+sentenceNetGediminas = SentenceNet()
 sentenceNetGediminas.createNet([fp2])
 sentenceNetGediminas.write_graph('gediminas_graph.gv')
 print 'Gediminas size', len(sentenceNetGediminas.get_net().nodes())
 
-sentenceNetRicci = SentenceNetCreator()
+sentenceNetRicci = SentenceNet()
 sentenceNetRicci.createNet([fp3])
 sentenceNetRicci.write_graph('ricci_graph.gv')
 print 'Ricci size', len(sentenceNetRicci.get_net().nodes())
 
-sentenceNetWikiGedi = SentenceNetCreator()
+sentenceNetWikiGedi = SentenceNet()
 sentenceNetWikiGedi.createNet([fp4])
 sentenceNetWikiGedi.write_graph('wikigedi_graph.gv')
 print 'WikiGedi size', len(sentenceNetWikiGedi.get_net().nodes())
@@ -75,7 +75,7 @@ for index, term in enumerate(path_wiki_tokens):
     subgraphwiki = sentenceNetWiki.get_connected_subgraph(term)
     current_subgraph = sentenceNetWiki.get_merged_subgraph(current_subgraph, subgraphwiki)
     #sentenceNetWiki.write_subgraph('./graphs/subgraph_wiki' + str(index) + '.gv', subgraphwiki)
-SentenceNetCreator.write_subgraph('./graphs/subgraph_wiki' + '.gv', current_subgraph)
+SentenceNet.write_subgraph('./graphs/subgraph_wiki' + '.gv', current_subgraph)
 
 path_gediminas_tokens = nltk.word_tokenize(path_gediminas)
 current_subgraph = digraph()
@@ -83,20 +83,20 @@ for index, term in enumerate(path_gediminas_tokens):
     subgraphgediminas = sentenceNetGediminas.get_connected_subgraph(term)
     current_subgraph = sentenceNetGediminas.get_merged_subgraph(current_subgraph, subgraphgediminas)   
     #sentenceNetGediminas.write_subgraph('./graphs/subgraph_gediminas' + str(index) + '.gv', subgraphgediminas)
-SentenceNetCreator.write_subgraph('./graphs/subgraph_gediminas' + '.gv', current_subgraph)
+SentenceNet.write_subgraph('./graphs/subgraph_gediminas' + '.gv', current_subgraph)
 
 path_ricci_tokens = nltk.word_tokenize(path_ricci)
 current_subgraph = digraph()
 for index, term in enumerate(path_ricci_tokens):
     subgraphricci = sentenceNetRicci.get_connected_subgraph(term)
-    current_subgraph = SentenceNetCreator.merge_graphs(current_subgraph, subgraphricci)   
+    current_subgraph = SentenceNet.merge_graphs(current_subgraph, subgraphricci)   
     #sentenceNetRicci.write_subgraph('./graphs/subgraph_ricci' + str(index) + '.gv', subgraphricci)
-SentenceNetCreator.write_subgraph('./graphs/subgraph_ricci' + '.gv', current_subgraph)
+SentenceNet.write_subgraph('./graphs/subgraph_ricci' + '.gv', current_subgraph)
 
 path_wikigedi_tokens = nltk.word_tokenize(path_wikigedi)
 current_subgraph = digraph()
 for index, term in enumerate(path_wikigedi_tokens):
     subgraphwikigedi = sentenceNetWikiGedi.get_connected_subgraph(term)
-    current_subgraph = SentenceNetCreator.merge_graphs(current_subgraph, subgraphwikigedi) 
+    current_subgraph = SentenceNet.merge_graphs(current_subgraph, subgraphwikigedi) 
     #sentenceNetWikiGedi.write_subgraph('./graphs/subgraph_wikigedi' + str(index) + '.gv', subgraphwikigedi)
-SentenceNetCreator.write_subgraph('./graphs/subgraph_wikigedi' + '.gv', current_subgraph)
+SentenceNet.write_subgraph('./graphs/subgraph_wikigedi' + '.gv', current_subgraph)

@@ -2,12 +2,12 @@
 @author: Giuseppe Lipari
 '''
 from __future__ import division
-
-import nltk
+from SentenceNet import SentenceNet
+from SentenceNetVisitor import SentenceNetVisitor
 from irutils.TextFilter import TextFilter
 from pygraph.classes.digraph import digraph
-from SentenceNetCreator import SentenceNetCreator
-from SentenceNetVisitor import SentenceNetVisitor
+import nltk
+
 
 class DistanceEvaluators(object):
     '''

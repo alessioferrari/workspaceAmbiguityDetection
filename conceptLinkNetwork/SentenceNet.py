@@ -25,15 +25,16 @@ OCCURRENCES_POS = 0 # the tuple representing the number of occurrences is the fi
 OCCURRENCES_VALUE_POS = 1 # the value of the number of occurrences is in position 1 in the tuple ('occurrences', <occurrences_number>)
 START_OCCURRENCES_NUM = 1 # the starting value for the number of occurrences, which will be placed in the node label
 
-class SentenceNetCreator(object):
+class SentenceNet(object):
     
     '''
     classdocs
     '''
 
 
-    def __init__(self):
-        self.gr = digraph()
+    def __init__(self, gr = digraph(), term_dict = dict()):
+        self.gr = gr
+        self.term_dict = term_dict
         #self.sentences = []
         self.edge_start_weight = EDGE_START_WEIGHT
         self.start_occurrences_num = START_OCCURRENCES_NUM 
@@ -46,6 +47,9 @@ class SentenceNetCreator(object):
 
     def get_start_occurrences_num(self):
         return self.start_occurrences_num
+    
+    def get_dictionary(self):
+        return self.term_dict
 
     @staticmethod    
     def write_subgraph(dest_file_name, subgraph):
@@ -113,6 +117,9 @@ class SentenceNetCreator(object):
             for token in single_tokens:
                 if not self.gr.has_node(token):
                     self.gr.add_node(str(token))
+                    self.term_dict[token] = 1
+                else:
+                    self.term_dict[token] = self.term_dict[token] + 1 
             
             for i, token in enumerate(tokens):
                 if i != 0:
@@ -126,9 +133,6 @@ class SentenceNetCreator(object):
                         new_number_of_occurrences = number_of_occurrences + 1
                         self.gr.set_edge_label(edge, new_number_of_occurrences)
                         self.gr.set_edge_weight(edge, wt = 1.0/new_number_of_occurrences)
-       
-    
-                    
             
     def write_graph(self, dest_file_name):
         dot = write(self.gr, True)
@@ -197,20 +201,21 @@ class SentenceNetCreator(object):
 
         return subgraph
 
+    
 
     
-    def evaluate_jaccard(self, path1, path2, filtered_sent):
-        """
-        evaluate the jaccard distance but deletes the words that are contained in filtered_sent
-        """
-        intersection_len = len((set(nltk.word_tokenize(path1)) & (set(nltk.word_tokenize(path2)))).difference(set(nltk.word_tokenize(filtered_sent))))
-        union_len = len((set(nltk.word_tokenize(path1)) | set(nltk.word_tokenize(path2))).difference(set(nltk.word_tokenize(filtered_sent))))              
-        if union_len != 0:
-            jaccard = intersection_len / union_len
-        else:
-            jaccard = 1.0
-
-        return jaccard
+#    def evaluate_jaccard(self, path1, path2, filtered_sent):
+#        """
+#        evaluate the jaccard distance but deletes the words that are contained in filtered_sent
+#        """
+#        intersection_len = len((set(nltk.word_tokenize(path1)) & (set(nltk.word_tokenize(path2)))).difference(set(nltk.word_tokenize(filtered_sent))))
+#        union_len = len((set(nltk.word_tokenize(path1)) | set(nltk.word_tokenize(path2))).difference(set(nltk.word_tokenize(filtered_sent))))              
+#        if union_len != 0:
+#            jaccard = intersection_len / union_len
+#        else:
+#            jaccard = 1.0
+#
+#        return jaccard
     
     def get_avg_edge_weight(self):
         """
@@ -246,13 +251,13 @@ class SentenceNetCreator(object):
         return g2
             
 ###Subject 1        
-##s1 = SentenceNetCreator()
+##s1 = SentenceNet()
 ###s1.createNet([fp1])
 ##n1 = s1.get_net()
 ##v1 = SentenceNetVisitor(n1, EDGE_START_WEIGHT, START_OCCURRENCES_NUM)
 
 ###Subject 2
-##s2 = SentenceNetCreator()
+##s2 = SentenceNet()
 #s2.createNet([fp2])
 ##n2 = s2.get_net()
 ##v2 = SentenceNetVisitor(n2, EDGE_START_WEIGHT, START_OCCURRENCES_NUM)

@@ -2,8 +2,7 @@
 @author: Giuseppe Lipari
 '''
 from DistanceEvaluators import DistanceEvaluators
-#from ProgressBar import progressBar
-from SentenceNetCreator import SentenceNetCreator
+from SentenceNet import SentenceNet
 from SentenceNetVisitor import SentenceNetVisitor
 from irutils.TextFilter import TextFilter
 from os import listdir
@@ -11,6 +10,7 @@ from os.path import isfile, join
 from pygraph.classes.digraph import digraph
 import nltk
 import sys
+#from ProgressBar import progressBar
 
 '''
 Metodo che Crea un grafo da una lista di file di testo usando A*
@@ -66,17 +66,17 @@ OCCURRENCES_POS = 0 # the tuple representing the number of occurrences is the fi
 OCCURRENCES_VALUE_POS = 1 # the value of the number of occurrences is in position 1 in the tuple ('occurrences', <occurrences_number>)
 START_OCCURRENCES_NUM = 1 # the starting value for the number of occurrences, which will be placed in the node label
 '''
-Net-Create from list of file with SentenceNetCreator createNet
+Net-Create from list of file with SentenceNet createNet
 '''
 if createmethod == "nopriority" :
-        s1 = SentenceNetCreator()
-        s1.createNet(fp1)
-        n1 = s1.get_net()
-        v1 = SentenceNetVisitor(n1, EDGE_START_WEIGHT, START_OCCURRENCES_NUM) 
 
-        s2 = SentenceNetCreator()
+        s1 = SentenceNet()
+        s1.createNet(fp1)
+        s2 = SentenceNet()
         s2.createNet(fp2)
+        n1 = s1.get_net()
         n2 = s2.get_net()
+        v1 = SentenceNetVisitor(n1, EDGE_START_WEIGHT, START_OCCURRENCES_NUM) 
         v2 = SentenceNetVisitor(n2, EDGE_START_WEIGHT, START_OCCURRENCES_NUM)
 
 
@@ -84,12 +84,12 @@ if createmethod == "nopriority" :
 Start net-Create with visit A-star
 '''
 if createmethod == "priority" :
-        s1 = SentenceNetCreator()
+        s1 = SentenceNet()
         n1 = s1.get_net()
         v1 = SentenceNetVisitor(n1, EDGE_START_WEIGHT, START_OCCURRENCES_NUM)
         file_netvisit(fp1,v1)
 
-        s2 = SentenceNetCreator()
+        s2 = SentenceNet()
         n2 = s2.get_net()
         v2 = SentenceNetVisitor(n2, EDGE_START_WEIGHT, START_OCCURRENCES_NUM)
         file_netvisit(fp2,v2)
@@ -111,8 +111,8 @@ for req in reqs:
                 overlap, subgraph1, subgraph2 = evaluator.jaccard_evaluator(req,s1,s2,v1,v2)
         shortreq = req[0:20].replace("/", "-")
         shortreq = shortreq.replace("\\", "-")
-        SentenceNetCreator.write_subgraph(pathres + 'R%d-'%(ind)+ shortreq + '-Subject1.gv', subgraph1)
-        SentenceNetCreator.write_subgraph(pathres + 'R%d-'%(ind)+ shortreq + '-Subject2.gv', subgraph2)
+        SentenceNet.write_subgraph(pathres + 'R%d-'%(ind)+ shortreq + '-Subject1.gv', subgraph1)
+        SentenceNet.write_subgraph(pathres + 'R%d-'%(ind)+ shortreq + '-Subject2.gv', subgraph2)
         r='Overlap:R%d-%s\n%.10f\n'%(ind,req[0:30],overlap)
         
         overlap_file.write(r)
