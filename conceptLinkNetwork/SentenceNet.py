@@ -32,9 +32,9 @@ class SentenceNet(object):
     '''
 
 
-    def __init__(self, gr = digraph(), term_dict = dict()):
-        self.gr = gr
-        self.term_dict = term_dict
+    def __init__(self):
+        self.gr = digraph()
+        self.term_dict = dict()
         #self.sentences = []
         self.edge_start_weight = EDGE_START_WEIGHT
         self.start_occurrences_num = START_OCCURRENCES_NUM 

@@ -9,7 +9,7 @@ import nltk
 from nltk.tokenize.treebank import TreebankWordTokenizer
 import re
 
-stopwords_file = "./stop_words.txt"
+stopwords_file = "../stop_words.txt"
 
 class TextFilter(object):
     '''

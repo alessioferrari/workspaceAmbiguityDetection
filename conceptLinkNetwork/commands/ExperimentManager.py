@@ -47,6 +47,8 @@ class ExperimentManager(object):
                 #print "evaluating distance...", datetime.datetime.now().time()
                 jaccard_dict[i], subgraph1, subgraph2 = evaluator.jaccard_evaluator_simple(requirement, s1, s2, v1, v2)
         
+        ######separate these two parts and store the distance file##########
+        
         for threshold in numpy.arange(range_start, range_end, step):
             print "evaluation for threshold: ", threshold, " time: ", datetime.datetime.now().time()
             file_name= "file_automatic" + str(threshold) + ".txt"

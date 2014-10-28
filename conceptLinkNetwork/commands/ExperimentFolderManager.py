@@ -3,10 +3,11 @@ Created on Sep 30, 2014
 
 @author: alessioferrari
 '''
+from constants import DIR_NAMES, DIST_TYPES
+from constants import SUBJECT_1
 import os
 
-DIR_NAMES = ['distance', 'docs', 'evaluation', 'nets', 'result']
-DIST_TYPES = ['min_sub_graph', 'min_path', 'sub_graph']
+
 
 class ExperimentFolderManager(object):
     '''
@@ -130,19 +131,21 @@ class ExperimentFolderManager(object):
         self.__create_distance_folder_structure(cut_e_cut_n_eval)
     
     def create_experiment_folder_structure(self, keywords, t_depth, t_links, sets_num, cut_e, cut_n):
-        e.create_basic_folder(keywords, t_depth, t_links)
+        '''
+        @param sets_num: number of sets
+        '''
+        self.create_basic_folder(keywords, t_depth, t_links)
         for i in range(sets_num):
-            e.create_set_folder(keywords, t_depth, t_links, i)
-            e.create_cuts_folders(keywords, t_depth, t_links, i, cut_e, cut_n)
-            e.create_result_folders(keywords, t_depth, t_links, i, cut_e, cut_n)
-            e.create_eval_folders(keywords, t_depth, t_links, i, cut_e, cut_n)
-    
-    
+            self.create_set_folder(keywords, t_depth, t_links, i)
+            self.create_cuts_folders(keywords, t_depth, t_links, i, cut_e, cut_n)
+            self.create_result_folders(keywords, t_depth, t_links, i, cut_e, cut_n)
+            self.create_eval_folders(keywords, t_depth, t_links, i, cut_e, cut_n)
     
     ###################-------------STORE FILES---------###################
+    
     def store_doc(self, keywords, t_depth, t_links, set_id, doc_name, doc, subject):
         docs_path = self.__get_docs_path(keywords, t_depth, t_links, set_id)
-        if subject == 1:
+        if subject == SUBJECT_1:
             fp = open(docs_path + os.sep + "subj1" + os.sep + doc_name, "w")
         else:
             fp = open(docs_path + os.sep + "subj2" + os.sep + doc_name, "w")
@@ -195,8 +198,8 @@ class ExperimentFolderManager(object):
     
           
             
-e = ExperimentFolderManager("./")
-e.create_experiment_folder_structure(["Outbreak","System","Management"], 2, 10, 3, 0.5, 10)
+#e = ExperimentFolderManager("./")
+#e.create_experiment_folder_structure(["Outbreak","System","Management"], 2, 10, 3, 0.5, 10)
 #e.create_basic_folder(["Outbreak","System"], 2, 10)
 #for i in range(2):
 #    e.create_set_folder(["Outbreak","System"], 2, 10, i)
@@ -204,8 +207,8 @@ e.create_experiment_folder_structure(["Outbreak","System","Management"], 2, 10, 
 #    e.create_result_folders(["Outbreak","System"], 2, 10, i, 0.5, 10)
 #    e.create_eval_folders(["Outbreak","System"], 2, 10, i, 0.5, 10)
     
-e.store_nets(["Outbreak","System","Management"], 2, 10, 2, 0.5, 10, 1, 2)
-e.store_doc(["Outbreak","System","Management"], 2, 10, 0, "prova.txt", "content", 1)
-e.store_distance_file(["Outbreak","System","Management"], 2, 10, 0, 0.5, 10, "min_path", "content")
-e.store_result_file(["Outbreak","System","Management"], 2, 10, 0, 0.5, 10, "min_path", 0.1, "content")
-e.store_evaluation_file(["Outbreak","System","Management"], 2, 10, 0, 0.5, 10, "min_path", t_start=0, t_end=1, step=0.1, content="content")
+#e.store_nets(["Outbreak","System","Management"], 2, 10, 2, 0.5, 10, 1, 2)
+#e.store_doc(["Outbreak","System","Management"], 2, 10, 0, "prova.txt", "content", 1)
+#e.store_distance_file(["Outbreak","System","Management"], 2, 10, 0, 0.5, 10, "min_path", "content")
+#e.store_result_file(["Outbreak","System","Management"], 2, 10, 0, 0.5, 10, "min_path", 0.1, "content")
+#e.store_evaluation_file(["Outbreak","System","Management"], 2, 10, 0, 0.5, 10, "min_path", t_start=0, t_end=1, step=0.1, content="content")
