@@ -13,3 +13,5 @@
 *.pyc
 
 conceptLinkNetwork/tmp/tmp/.kgtproject.xml
+
+!AllRequirements!.txt
