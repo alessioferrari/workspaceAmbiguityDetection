@@ -5,7 +5,6 @@ Created on 24/gen/2012
 '''
 from __future__ import division
 from SentenceNetVisitor import SentenceNetVisitor
-from XMLReqManager import XMLReqManager
 from irutils.TextFilter import TextFilter
 from pygraph.classes.digraph import digraph
 from pygraph.classes.graph import graph

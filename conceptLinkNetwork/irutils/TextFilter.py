@@ -4,12 +4,16 @@ Created on 25/gen/2012
 @author: Alessio
 '''
 
+
 from nltk.stem.porter import PorterStemmer
-import nltk
 from nltk.tokenize.treebank import TreebankWordTokenizer
+import irutils
+import nltk
+import os
 import re
 
-stopwords_file = "../stop_words.txt"
+
+stopwords_file = "stop_words.txt"
 
 class TextFilter(object):
     '''
@@ -22,7 +26,8 @@ class TextFilter(object):
         '''
         Constructor
         '''
-        self.stopwords = open(stopwords_file, 'r').read().split()
+        cur_path = os.path.dirname(irutils.TextFilter.__file__)
+        self.stopwords = open(cur_path + os.sep + stopwords_file, 'r').read().split()
         self.wordTokenizer = TreebankWordTokenizer()
         
     def remove_stopwords(self, string_text):

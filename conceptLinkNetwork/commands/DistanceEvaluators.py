@@ -11,7 +11,7 @@ import nltk
 
 class DistanceEvaluators(object):
     '''
-    this class provide methods for evaluate distance of two graph path
+    this class provide methods for evaluating distance of two graph path
     '''
     
     def __get_minimum_jaccard(self, nodes1, nodes2):
