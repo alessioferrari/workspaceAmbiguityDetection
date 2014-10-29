@@ -8,6 +8,7 @@ Created on Oct 29, 2014
 from knowledge_graph.SentenceNet import SentenceNet
 from knowledge_graph.Subject import Subject
 from knowledge_graph.SubjectsCreator import SubjectsCreator
+from knowledge_graph.constants import DIST_MIN_PATH_SUBGRAPH
 from numpy.random import choice
 from os import listdir
 from os.path import isfile, join
@@ -17,7 +18,6 @@ import os
 
 
 LOG_FILENAME = __file__ + '.log'
-PATH_FILE_REQ = "none"
 
 class InterpretationManager(object):
     '''
@@ -41,16 +41,28 @@ class InterpretationManager(object):
     def create_subjects(self, n, root_folder):
         return self.subj_creator.create_subjects(n, root_folder)
             
-    def perform_interpretation(self, requirements_file_path, type):    
+    def perform_interpretations(self, requirements_file_path, type):    
         '''
         This function takes the file in @param requirements_file_path,
         which includes one requirement for each line. Interpreation
         is performed by each knowledge graph, according to the selected @param type.
         Interpretations for each requirement and each type are stored in an Interpretation object.
         '''
-        req_file=open(PATH_FILE_REQ,"r")
+        req_file=open(requirements_file_path,"r")
         reqs = req_file.readlines()
+        req_file.close()
         
+        interpretations_dictionary = dict()
+        
+        for index, req in reqs:
+            interpretation_list = list()
+            for sub in self.subj_creator.subject_dict.keys():
+                interpretation = self.subj_creator.subject_dict[sub].perform_interpretation(req, type)
+                interpretation_list.append(interpretation)
+            interpretations_dictionary[index] = interpretation_list
+            
+            #this intepretation list shall be added to a dictionary associated to the requirement#
                 
 i = InterpretationManager()
-subjects = i.create_subjects(3,'knowledge_base')
+i.create_subjects(2,'knowledge_base')
+i.perform_interpretations("AllRequirements.txt",DIST_MIN_PATH_SUBGRAPH)

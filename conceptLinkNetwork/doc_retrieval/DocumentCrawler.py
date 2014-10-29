@@ -12,7 +12,7 @@ import logging
 
 
 ROOT_PATH = "../knowledge_base"
-LOG_FILENAME = ROOT_PATH + os.sep + __file__ + '.log'
+LOG_FILENAME = ROOT_PATH + os.sep + __name__ + '.log'
 
 
 class DocumentCrawler(object):
@@ -110,6 +110,6 @@ class DocumentCrawler(object):
         '''
         return self.doc_dict
 
-#d = DocumentCrawler()
-#d.search_and_store('Outbreak', t_depth = 2, t_links = 10, depth = 0, root_path = ROOT_PATH, create_subfolders="Y")
+d = DocumentCrawler()
+d.search_and_store('Outbreak', t_depth = 2, t_links = 10, depth = 0, root_path = ROOT_PATH, create_subfolders="Y")
 #print d.get_retieved_files()
