@@ -12,6 +12,7 @@ from knowledge_graph.constants import DIST_MIN_PATH_SUBGRAPH
 from numpy.random import choice
 from os import listdir
 from os.path import isfile, join
+import datetime
 import irutils
 import logging
 import os
@@ -52,16 +53,21 @@ class InterpretationManager(object):
         reqs = req_file.readlines()
         req_file.close()
         
+        print "START interpretation", datetime.datetime.now().time()
+        
         interpretations_dictionary = dict()
         
-        for index, req in reqs:
+        for index, req in enumerate(reqs[0:2]):
             interpretation_list = list()
             for sub in self.subj_creator.subject_dict.keys():
                 interpretation = self.subj_creator.subject_dict[sub].perform_interpretation(req, type)
                 interpretation_list.append(interpretation)
             interpretations_dictionary[index] = interpretation_list
-            
-            #this intepretation list shall be added to a dictionary associated to the requirement#
+        
+        
+        print "\nFINISH", datetime.datetime.now().time()
+        
+        return interpretations_dictionary
                 
 i = InterpretationManager()
 i.create_subjects(2,'knowledge_base')
