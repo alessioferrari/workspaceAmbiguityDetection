@@ -5,14 +5,15 @@ Created on Sep 22, 2014
 '''
 from __future__ import division
 from wikipedia.exceptions import PageError, DisambiguationError
+import logging
 import numpy
 import os
+from utils import utils
 import wikipedia
-import logging
 
 
 ROOT_PATH = "../knowledge_base"
-LOG_FILENAME = ROOT_PATH + os.sep + __name__ + '.log'
+LOG_FILENAME =  __name__ + '.log'
 
 
 class DocumentCrawler(object):
@@ -25,22 +26,21 @@ class DocumentCrawler(object):
     '''
 
 
-    def __init__(self):
+    def __init__(self, crawl_directory):
         '''
         Constructor
         '''
         self.doc_dict = dict()
         
+        utils.create_folder(crawl_directory)
+        
         self.logger = logging.getLogger(__name__) 
-        hdlr = logging.FileHandler(LOG_FILENAME, mode="w")
+        hdlr = logging.FileHandler(crawl_directory + os.sep + LOG_FILENAME, mode="w")
         formatter = logging.Formatter('%(asctime)s %(levelname)s %(message)s')
         hdlr.setFormatter(formatter)
         self.logger.addHandler(hdlr) 
         self.logger.setLevel(logging.INFO)  
-        
-    def __create_folder(self, input_path):
-        if not os.path.exists(input_path):
-            os.makedirs(input_path) 
+
 
     def get_text(self, wikipage=""):
         return wikipedia.page(wikipage).content
@@ -78,7 +78,7 @@ class DocumentCrawler(object):
         
         if create_subfolders == "Y": 
             sub_path= root_path + os.sep + str(depth+1)
-            self.__create_folder(sub_path)
+            utils.create_folder(sub_path)
         else:
             sub_path = root_path
         
@@ -110,6 +110,6 @@ class DocumentCrawler(object):
         '''
         return self.doc_dict
 
-d = DocumentCrawler()
-d.search_and_store('Outbreak', t_depth = 2, t_links = 10, depth = 0, root_path = ROOT_PATH, create_subfolders="Y")
+#d = DocumentCrawler(ROOT_PATH)
+#d.search_and_store('Outbreak', t_depth = 2, t_links = 10, depth = 0, root_path = ROOT_PATH, create_subfolders="Y")
 #print d.get_retieved_files()

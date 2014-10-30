@@ -15,12 +15,12 @@ from knowledge_graph.constants import INT_MIN_PATH_SUBGRAPH, REQ_TERMS_REMOVE, \
 from numpy.random import choice
 from os import listdir
 from os.path import isfile, join
+from utils import utils
 import csv
 import datetime
 import irutils
 import logging
 import os
-from utils import utils
 
 
 LOG_FILENAME = __file__ + '.log'
@@ -49,7 +49,7 @@ class InterpretationManager(object):
     def create_subjects(self, n, root_folder):
         return self.subj_creator.create_subjects(n, root_folder)
             
-    def perform_interpretations(self, requirements_file_path, type):    
+    def perform_interpretations(self, requirements_file_path, type, flg_reduce_list, max_requirements):    
         '''
         This function takes the file in @param requirements_file_path,
         which includes one requirement for each line. Interpreation
@@ -60,9 +60,14 @@ class InterpretationManager(object):
         reqs = req_file.readlines()
         req_file.close()
         
+        if flg_reduce_list == 1:
+            req_list = reqs[0:max_requirements]
+        else:
+            req_list = reqs 
+        
         interpretations_dictionary = dict()
         
-        for index, req in enumerate(reqs[0:2]):
+        for index, req in enumerate(req_list):
             interpretation_list = list()
             for sub in self.subj_creator.subject_dict.keys():
                 interpretation = self.subj_creator.subject_dict[sub].perform_interpretation(req, type, REQ_TERMS_REMOVE)
@@ -97,9 +102,9 @@ class InterpretationManager(object):
         utils.store_dict_in_csv(dictionary, file_path)
         
                   
-i = InterpretationManager()
-i.create_subjects(2,'knowledge_base')
-interpretations = i.perform_interpretations("AllRequirements.txt",INT_MIN_PATH_SUBGRAPH)
-distances = i.compare_interpretations(DIST_TYPE_JACCARD, interpretations)
-i.store_distances(distances,"distances.csv")
+#i = InterpretationManager()
+#i.create_subjects(2,'knowledge_base')
+#interpretations = i.perform_interpretations("AllRequirements.txt",INT_MIN_PATH_SUBGRAPH)
+#distances = i.compare_interpretations(DIST_TYPE_JACCARD, interpretations)
+#i.store_distances(distances,"distances.csv")
 

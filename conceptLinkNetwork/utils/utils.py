@@ -4,6 +4,7 @@ Created on Oct 30, 2014
 @author: alessioferrari
 '''
 import csv
+import os
 
 FLOAT = 'FLOAT'
 INT = 'INT'
@@ -25,3 +26,7 @@ def read_dict_from_csv(file_path, data_type):
         for key, val in csv.reader(open(file_path)):
             dict[key] = val        
     return dict
+
+def create_folder(input_path):
+    if not os.path.exists(input_path):
+        os.makedirs(input_path) 
