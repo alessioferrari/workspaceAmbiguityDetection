@@ -6,7 +6,7 @@ Created on Oct 29, 2014
 from irutils.TextFilter import TextFilter
 from knowledge_graph.SentenceNet import SentenceNet
 from knowledge_graph.SentenceNetVisitor import SentenceNetVisitor
-from knowledge_graph.constants import DIST_MIN_PATH_SUBGRAPH
+from knowledge_graph.constants import INT_MIN_PATH_SUBGRAPH, REQ_TERMS_REMOVE
 from pygraph.classes.digraph import digraph
 import nltk
 
@@ -37,8 +37,13 @@ class Subject(SentenceNet):
         self.visitor = SentenceNetVisitor(self.get_net(), self.get_edge_start_weight(), self.get_start_occurrences_num()) 
         
         
-    def perform_interpretation(self, requirement, type):
-        if type == DIST_MIN_PATH_SUBGRAPH:
+    def perform_interpretation(self, requirement, type, flag_remove_req_terms):
+        '''
+        the @param remove_req_terms: when set to REQ_TERMS_REMOVE, removes from the
+        interpretation all the nodes corresponding to the terms in the original
+        requirement. 
+        '''
+        if type == INT_MIN_PATH_SUBGRAPH:
             
             terms_filter = TextFilter()
             filtered_sent = terms_filter.filter_all(requirement)
@@ -48,9 +53,13 @@ class Subject(SentenceNet):
         
             current_subgraph = digraph()
         
-        for index, term in enumerate(path_tokens):
-            subgraph_req = self.get_connected_subgraph(term)
-            current_subgraph = self.get_merged_subgraph(current_subgraph,subgraph_req)
-            del subgraph_req
+            for index, term in enumerate(path_tokens):
+                subgraph_req = self.get_connected_subgraph(term)
+                current_subgraph = self.get_merged_subgraph(current_subgraph,subgraph_req)
+                del subgraph_req
+            
+            if flag_remove_req_terms == REQ_TERMS_REMOVE:
+                for term in set(nltk.word_tokenize(filtered_sent)):
+                    current_subgraph.del_node(term)
         
         return current_subgraph
