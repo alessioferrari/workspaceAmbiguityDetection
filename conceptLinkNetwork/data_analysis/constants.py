@@ -1,0 +1,9 @@
+'''
+Created on Oct 30, 2014
+
+@author: alessioferrari
+'''
+AMBIGUOUS = 1
+NOT_AMBIGUOUS = 0
+POSITIVE = AMBIGUOUS
+NEGATIVE = NOT_AMBIGUOUS

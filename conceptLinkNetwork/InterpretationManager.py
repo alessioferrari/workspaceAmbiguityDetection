@@ -95,9 +95,11 @@ class InterpretationManager(object):
     
     def store_distances(self, dictionary, file_path):
         utils.store_dict_in_csv(dictionary, file_path)
+        
                   
 i = InterpretationManager()
 i.create_subjects(2,'knowledge_base')
 interpretations = i.perform_interpretations("AllRequirements.txt",INT_MIN_PATH_SUBGRAPH)
 distances = i.compare_interpretations(DIST_TYPE_JACCARD, interpretations)
 i.store_distances(distances,"distances.csv")
+
