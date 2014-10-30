@@ -1,0 +1,24 @@
+@startuml
+
+ExperimentManager *-->DocumentCrawler
+ExperimentManager *-->InterpretationManager
+ExperimentManager *-->ResultEvaluator
+DocumentCrawler-->DocSet
+DocSet *-- Doc
+Doc .. DocumentFILE
+InterpretationManager *-->Subject
+Subject -->Interpretation
+Subject ..>DocSet
+Subject*--KnowledgeGraph
+InterpretationManager-->RequirementsDocument
+RequirementsDocument *-- Requirement
+Interpretation ..>Requirement
+InterpretationManager-->Distance
+ResultEvaluator-->Distance
+ResultEvaluator-->AutoAmbiguityResult
+ResultEvaluator-->Evaluation
+ResultEvaluator-->ManualAmbiguityResult
+Distance .. DistancesFILE
+ResultEvaluator .. DistancesFILE
+
+@enduml
