@@ -45,6 +45,10 @@ p_t_links = 3
 #===============================================================================
 # InterpretationManager parameters
 #===============================================================================
+
+#parameter to cut the nodes and the edges of the subjects
+p_list_cut = [(0,float(1.0)),(3,float(0.5))]
+
 p_n_subjects = 2
 p_int_type = [INT_SUBGRAPH, INT_MIN_PATH_SUBGRAPH]
 p_dist_type = [DIST_TYPE_JACCARD]
@@ -60,7 +64,7 @@ p_step = 0.1
 #===============================================================================
 p_do_crawl = 0
 p_do_compute_dist = 1
-p_do_evaluate_results = 1
+p_do_evaluate_results = 0
 
 utils.create_folder(PROJECT_PATH)
 utils.create_folder(KNOWLEDGE_BASE_PATH)
@@ -79,19 +83,21 @@ if p_do_crawl == 1:
 if p_do_compute_dist == 1:
     knowledge_dirs = [join(KNOWLEDGE_BASE_PATH,f) for f in listdir(KNOWLEDGE_BASE_PATH) if isdir(join(KNOWLEDGE_BASE_PATH,f))]
     for knowledge_dir in knowledge_dirs:   
-        experiment_log.info("START Subject creation")
-        i = InterpretationManager()
-        i.create_subjects(p_n_subjects, knowledge_dir)
-        experiment_log.info("END Subject creation")
-        for interpretation_type in p_int_type:
-            experiment_log.info("START Interpretation " + interpretation_type)
-            interpretations = i.perform_interpretations(REQUIREMENTS_FILE_PATH, interpretation_type, flg_reduce_list=1, max_requirements=2)
-            experiment_log.info("END Interpretation " + interpretation_type)
-            for distance_type in p_dist_type:
-                experiment_log.info("START Evaluating Distances " + distance_type)
-                distances = i.compare_interpretations(distance_type, interpretations)
-                i.store_distances(distances, DISTANCES_FILE_PATH + os.sep + basename(knowledge_dir) +'_' + interpretation_type + '_' + distance_type + '.csv')
-                experiment_log.info("END Evaluating Distances " + distance_type)
+        for cuts in p_list_cut:
+            experiment_log.info("START Subject creation")
+            i = InterpretationManager(cuts[0], cuts[1])
+            i.create_subjects(p_n_subjects, knowledge_dir)
+            experiment_log.info("END Subject creation")
+            for interpretation_type in p_int_type:
+                experiment_log.info("START Interpretation " + interpretation_type)
+                interpretations = i.perform_interpretations(REQUIREMENTS_FILE_PATH, interpretation_type, flg_reduce_list=1, max_requirements=2)
+                experiment_log.info("END Interpretation " + interpretation_type)
+                for distance_type in p_dist_type:
+                    experiment_log.info("START Evaluating Distances " + distance_type)
+                    distances = i.compare_interpretations(distance_type, interpretations)
+                    i.store_distances(distances, DISTANCES_FILE_PATH + os.sep + basename(knowledge_dir) + \
+                                      '_n_' + str(cuts[0]) + '_e_' + str(cuts[1]) + '_' + interpretation_type + '_' + distance_type + '.csv')
+                    experiment_log.info("END Evaluating Distances " + distance_type)
 
 if p_do_evaluate_results == 1:
     experiment_log.info("START Evaluating Results ")

@@ -6,7 +6,8 @@ ExperimentManager *-->ResultEvaluator
 DocumentCrawler-->DocSet
 DocSet *-- Doc
 Doc .. DocumentFILE
-InterpretationManager *-->Subject
+InterpretationManager *--> SubjectsCreator
+SubjectsCreator *-->Subject
 Subject -->Interpretation
 Subject ..>DocSet
 Subject*--KnowledgeGraph
@@ -20,5 +21,6 @@ ResultEvaluator-->Evaluation
 ResultEvaluator-->ManualAmbiguityResult
 Distance .. DistancesFILE
 ResultEvaluator .. DistancesFILE
+
 
 @enduml

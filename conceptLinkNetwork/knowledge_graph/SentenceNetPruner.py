@@ -18,7 +18,7 @@ class SentenceNetPruner(object):
     def __init__(self):
         return
     
-    def pruneNet(self, sentence_net_in, threshold_term_count = 0, threshold_edge_weight = float(0.5)):
+    def pruneNet(self, sentence_net_in, threshold_term_count = 0, threshold_edge_weight = float(1.0)):
         '''
         Prunes the @param sentence_net network
         '''
@@ -37,9 +37,9 @@ class SentenceNetPruner(object):
             if n.edge_weight(e) > threshold_edge_weight:
                 n.del_edge(e) 
         
-prj_path = './tmp/tmp'                
-pathsub2= prj_path + '/2Subject/'
-pathsub1= prj_path + '/1Subject/'
+#prj_path = './tmp/tmp'                
+#pathsub2= prj_path + '/2Subject/'
+#pathsub1= prj_path + '/1Subject/'
 
 ##create the graphs
 #fp2 = [ (pathsub2 + f) for f in listdir(pathsub2) if isfile(join(pathsub2,f)) ]

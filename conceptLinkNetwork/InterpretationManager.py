@@ -31,11 +31,11 @@ class InterpretationManager(object):
     '''
 
 
-    def __init__(self):
+    def __init__(self, threshold_term_count = 0, threshold_edge_weight = float(1.0)):
         '''
         Constructor
         '''
-        self.subj_creator = SubjectsCreator()
+        self.subj_creator = SubjectsCreator(threshold_term_count,threshold_edge_weight)
         self.interpretation_dictionaries = dict()
         self.distance_dictionaries = dict()
         

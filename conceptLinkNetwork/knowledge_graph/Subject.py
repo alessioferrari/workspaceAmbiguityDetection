@@ -38,10 +38,7 @@ class Subject(SentenceNet):
         self.visitor = SentenceNetVisitor(self.get_net(), self.get_edge_start_weight(), self.get_start_occurrences_num())  
      
     def __perform_min_path_subgraph(self, filtered_sent):
-                    
-    
         path, path_weight = self.visitor.search_A_star(filtered_sent)
-        #path_tokens = nltk.word_tokenize(path)
               
         return self.__perform_int_subgraph(path)
     

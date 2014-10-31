@@ -5,6 +5,7 @@ Created on Oct 29, 2014
 '''
 
 from knowledge_graph.SentenceNet import SentenceNet
+from knowledge_graph.SentenceNetPruner import SentenceNetPruner
 from knowledge_graph.Subject import Subject
 from numpy.random import choice
 from os import listdir
@@ -21,11 +22,14 @@ class SubjectsCreator(object):
     '''
 
 
-    def __init__(self):
+    def __init__(self, threshold_term_count = 0, threshold_edge_weight = float(1.0)):
         '''
         Constructor
         '''
         self.subject_dict = dict()
+        self.threshold_term_count = threshold_term_count
+        self.threshold_edge_weight = threshold_edge_weight
+        self.pruner = SentenceNetPruner()
         
     def __assign_doc(self, n, depth, doc_path):
             
@@ -67,6 +71,6 @@ class SubjectsCreator(object):
         
         for k in self.subject_dict.keys():
             self.subject_dict[k].build_knowledge_graph()    
-            
+            self.pruner.pruneNet(self.subject_dict[k], self.threshold_term_count, self.threshold_edge_weight)
         
         return self.subject_dict

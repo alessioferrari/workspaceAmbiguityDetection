@@ -45,6 +45,9 @@ class DocumentCrawler(object):
         except PageError:
             self.logger.exception("Document " + wikipage + " Not found!")
             links = []
+        except DisambiguationError:
+            self.logger.exception("Disambiguation page discarded!") 
+            links = []
         return links
     
     def write_file(self, file_path, link):
