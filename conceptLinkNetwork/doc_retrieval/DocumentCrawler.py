@@ -4,15 +4,16 @@ Created on Sep 22, 2014
 @author: alessioferrari
 '''
 from __future__ import division
+from os.path import basename
+from utils import utils
 from wikipedia.exceptions import PageError, DisambiguationError
 import logging
 import numpy
 import os
-from utils import utils
+import random
 import wikipedia
 
 
-ROOT_PATH = "../knowledge_base"
 LOG_FILENAME =  __name__ + '.log'
 
 
@@ -32,7 +33,7 @@ class DocumentCrawler(object):
         '''
         self.doc_dict = dict()
         utils.create_folder(crawl_directory)
-        self.logger = utils.start_logger(__name__, crawl_directory + os.sep + LOG_FILENAME) 
+        self.logger = utils.start_logger(basename(crawl_directory) + __name__, crawl_directory + os.sep + LOG_FILENAME) 
 
 
     def get_text(self, wikipage=""):
@@ -92,6 +93,9 @@ class DocumentCrawler(object):
             if link not in self.doc_dict.keys():
                     new_links.append(link)
         
+        #this line randomize the order of the links in the list so that 
+        #not only the first links in alphabetical order are taken
+        random.shuffle(new_links)
         
         self.store_files(sub_path, new_links[0:t_links])
         
