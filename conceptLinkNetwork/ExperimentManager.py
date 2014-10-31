@@ -62,16 +62,16 @@ p_step = 0.1
 #===============================================================================
 # Flags to activate components
 #===============================================================================
-p_do_crawl = 0
+p_do_crawl = 1
 p_do_compute_dist = 1
-p_do_evaluate_results = 0
+p_do_evaluate_results = 1
 
-utils.create_folder(PROJECT_PATH)
-utils.create_folder(KNOWLEDGE_BASE_PATH)
-utils.create_folder(DISTANCES_FILE_PATH)
-utils.create_folder(EVALUATION_RESULT_PATH)
+#===============================================================================
+# Functions to perform the different activities, crawl, 
+# distance_evaluation, result_evaluation
+#===============================================================================
 
-if p_do_crawl == 1:
+def perform_crawl():
     experiment_log.info("START Document crawl")
     for experiment in p_crawl_config_dict.keys():
         experiment_path = KNOWLEDGE_BASE_PATH + os.sep + str(experiment)
@@ -80,11 +80,11 @@ if p_do_crawl == 1:
             d.search_and_store(k, t_depth = p_t_depth, t_links = p_t_links, depth = 0, root_path = experiment_path, create_subfolders="Y")
     experiment_log.info("END Document crawl")
 
-if p_do_compute_dist == 1:
+def perform_distance_evaluation():
     knowledge_dirs = [join(KNOWLEDGE_BASE_PATH,f) for f in listdir(KNOWLEDGE_BASE_PATH) if isdir(join(KNOWLEDGE_BASE_PATH,f))]
     for knowledge_dir in knowledge_dirs:   
         for cuts in p_list_cut:
-            experiment_log.info("START Subject creation")
+            experiment_log.info("START Subject creation " + "cut-parameters: " + str(cuts))
             i = InterpretationManager(cuts[0], cuts[1])
             i.create_subjects(p_n_subjects, knowledge_dir)
             experiment_log.info("END Subject creation")
@@ -99,7 +99,7 @@ if p_do_compute_dist == 1:
                                       '_n_' + str(cuts[0]) + '_e_' + str(cuts[1]) + '_' + interpretation_type + '_' + distance_type + '.csv')
                     experiment_log.info("END Evaluating Distances " + distance_type)
 
-if p_do_evaluate_results == 1:
+def perform_evaluate_results():
     experiment_log.info("START Evaluating Results ")
     r = ResultsEvaluator()
     manual_dict = r.read_manual_ambiguity_file(MANUAL_AMBIGUITY_FILE)
@@ -111,5 +111,20 @@ if p_do_evaluate_results == 1:
         if not (d == -1):
             r.store_evaluation(d, EVALUATION_RESULT_PATH + os.sep + 'res_' + basename(f))  
     experiment_log.info("END Evaluating Results ")
+
+
+utils.create_folder(PROJECT_PATH)
+utils.create_folder(KNOWLEDGE_BASE_PATH)
+utils.create_folder(DISTANCES_FILE_PATH)
+utils.create_folder(EVALUATION_RESULT_PATH)
+
+if p_do_crawl == 1:
+    perform_crawl()
+
+if p_do_compute_dist == 1:
+    perform_distance_evaluation()
+
+if p_do_evaluate_results == 1:
+    perform_evaluate_results()
 
 print 'done'
