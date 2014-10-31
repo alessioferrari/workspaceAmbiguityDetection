@@ -25,7 +25,6 @@ class ExperimentManager(object):
         '''
         
 PROJECT_PATH = './project'
-#KNOWLEDGE_BASE_PATH = os.path.abspath(PROJECT_PATH + os.sep + 'knowledge_base')
 KNOWLEDGE_BASE_PATH = PROJECT_PATH + os.sep + 'knowledge_base'
 REQUIREMENTS_FILE_PATH = PROJECT_PATH + os.sep + "AllRequirements.txt"        
 DISTANCES_FILE_PATH = PROJECT_PATH + os.sep + 'distances'
