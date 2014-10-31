@@ -169,7 +169,7 @@ class SentenceNet(object):
         """
         The function takes the two graphs @param g1 and @param g2 and 
         returns the subgraph of the original graph that
-        contains the nodes of the two subgraphs , otgether with the weigthed edges of the original graph.
+        contains the nodes of the two subgraphs , together with the weigthed edges of the original graph.
         The function returns -1 if the get_subgraph function returns -1
         """
         nodes = list(set(g1.nodes()) | set(g2.nodes()))

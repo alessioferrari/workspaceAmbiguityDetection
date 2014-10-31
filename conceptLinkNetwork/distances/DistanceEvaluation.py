@@ -42,7 +42,7 @@ class DistanceEvaluation(object):
             if union_len != 0:
                 jaccard = float(intersection_len / union_len)
             else:
-                jaccard = 1.0
+                jaccard = 0.0
             
             return jaccard
         

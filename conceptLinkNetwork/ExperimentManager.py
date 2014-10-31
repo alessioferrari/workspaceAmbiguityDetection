@@ -7,7 +7,7 @@ from InterpretationManager import InterpretationManager
 from data_analysis.ResultsEvaluator import ResultsEvaluator
 from distances.constants import DIST_TYPE_JACCARD
 from doc_retrieval.DocumentCrawler import DocumentCrawler
-from knowledge_graph.constants import INT_MIN_PATH_SUBGRAPH
+from knowledge_graph.constants import INT_MIN_PATH_SUBGRAPH, INT_SUBGRAPH
 from os import listdir
 from os.path import isfile, join, basename
 from utils import utils
@@ -42,8 +42,8 @@ p_t_links = 3
 # InterpretationManager parameters
 #===============================================================================
 p_n_subjects = 2
-p_int_type = INT_MIN_PATH_SUBGRAPH
-p_dist_type = DIST_TYPE_JACCARD
+p_int_type = [INT_SUBGRAPH, INT_MIN_PATH_SUBGRAPH]
+p_dist_type = [DIST_TYPE_JACCARD]
 
 #===============================================================================
 # ResultsEvaluator parameters
@@ -54,7 +54,7 @@ p_step = 0.1
 #===============================================================================
 # Flags to activate components
 #===============================================================================
-p_do_crawl = 1
+p_do_crawl = 0
 p_do_compute_dist = 1
 p_do_evaluate_results = 1
 
@@ -70,15 +70,17 @@ if p_do_crawl == 1:
 if p_do_compute_dist == 1:
     i = InterpretationManager()
     i.create_subjects(p_n_subjects, KNOWLEDGE_BASE_PATH)
-    interpretations = i.perform_interpretations(REQUIREMENTS_FILE_PATH, p_int_type, flg_reduce_list=1, max_requirements=2)
-    distances = i.compare_interpretations(p_dist_type, interpretations)
-    i.store_distances(distances, DISTANCES_FILE_PATH + os.sep + p_dist_type + '.csv')
+    for interpretation_type in p_int_type:
+        interpretations = i.perform_interpretations(REQUIREMENTS_FILE_PATH, interpretation_type, flg_reduce_list=1, max_requirements=2)
+        for distance_type in p_dist_type:
+            distances = i.compare_interpretations(distance_type, interpretations)
+            i.store_distances(distances, DISTANCES_FILE_PATH + os.sep + interpretation_type + '_' + distance_type + '.csv')
 
 if p_do_evaluate_results == 1:
     r = ResultsEvaluator()
     manual_dict = r.read_manual_ambiguity_file(MANUAL_AMBIGUITY_FILE)
     
-    dist_files = [join(DISTANCES_FILE_PATH,f) for f in listdir(DISTANCES_FILE_PATH) if isfile(join(DISTANCES_FILE_PATH,f)) ]
+    dist_files = [join(DISTANCES_FILE_PATH,f) for f in listdir(DISTANCES_FILE_PATH) if isfile(join(DISTANCES_FILE_PATH,f)) and f.endswith('.csv')]
     for f in dist_files:
         dist = r.read_distances(f)
         d = r.perform_evaluation(dist, manual_dict, 0, 1, p_step)  
