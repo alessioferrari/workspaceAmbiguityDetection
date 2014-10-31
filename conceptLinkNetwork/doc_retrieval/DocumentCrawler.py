@@ -31,22 +31,20 @@ class DocumentCrawler(object):
         Constructor
         '''
         self.doc_dict = dict()
-        
         utils.create_folder(crawl_directory)
-        
-        self.logger = logging.getLogger(__name__) 
-        hdlr = logging.FileHandler(crawl_directory + os.sep + LOG_FILENAME, mode="w")
-        formatter = logging.Formatter('%(asctime)s %(levelname)s %(message)s')
-        hdlr.setFormatter(formatter)
-        self.logger.addHandler(hdlr) 
-        self.logger.setLevel(logging.INFO)  
+        self.logger = utils.start_logger(__name__, crawl_directory + os.sep + LOG_FILENAME) 
 
 
     def get_text(self, wikipage=""):
         return wikipedia.page(wikipage).content
         
     def get_links(self, wikipage=""):
-        return wikipedia.page(wikipage).links
+        try:
+            links = wikipedia.page(wikipage).links
+        except PageError:
+            self.logger.exception("Document " + wikipage + " Not found!")
+            links = []
+        return links
     
     def write_file(self, file_path, link):
         try:    
@@ -58,7 +56,6 @@ class DocumentCrawler(object):
             self.logger.exception("Document " + link + " Not found!") 
         except DisambiguationError:
             self.logger.exception("Disambiguation page discarded!") 
-        
         self.doc_dict[link] = file_path
     
     def store_files(self, file_path, links):

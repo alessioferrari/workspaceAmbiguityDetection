@@ -41,15 +41,17 @@ class Subject(SentenceNet):
                     
     
         path, path_weight = self.visitor.search_A_star(filtered_sent)
-        path_tokens = nltk.word_tokenize(path)
+        #path_tokens = nltk.word_tokenize(path)
               
-        return self.__perform_int_subgraph(path_tokens)
+        return self.__perform_int_subgraph(path)
     
     def __perform_int_subgraph(self, filtered_sent):
         
         current_subgraph = digraph()
+        sent_tokens =  nltk.word_tokenize(filtered_sent)
         
-        for term in filtered_sent:
+        for term in sent_tokens:
+            
             subgraph_req = self.get_connected_subgraph(term)
             if subgraph_req.nodes() != []:
                 current_subgraph = self.get_merged_subgraph(current_subgraph,subgraph_req)
@@ -61,7 +63,7 @@ class Subject(SentenceNet):
         '''
         the @param remove_req_terms: when set to REQ_TERMS_REMOVE, removes from the
         interpretation all the nodes corresponding to the terms in the original
-        requirement. 
+        requirement, if these have been stored in the path. 
         '''
         terms_filter = TextFilter()
         filtered_sent = terms_filter.filter_all(requirement)

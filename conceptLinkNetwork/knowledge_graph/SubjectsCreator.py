@@ -27,14 +27,6 @@ class SubjectsCreator(object):
         '''
         self.subject_dict = dict()
         
-        self.logger = logging.getLogger(__file__) 
-        hdlr = logging.FileHandler(LOG_FILENAME, mode="w")
-        formatter = logging.Formatter('%(asctime)s %(levelname)s %(message)s')
-        hdlr.setFormatter(formatter)
-        self.logger.addHandler(hdlr) 
-        self.logger.setLevel(logging.INFO)
-    
-        
     def __assign_doc(self, n, depth, doc_path):
             
             file_name = os.path.basename(doc_path)
@@ -67,7 +59,6 @@ class SubjectsCreator(object):
         the depth of the folder.
         '''  
         
-        self.logger.info("creating " + str(n) + " subjects")
         for i in range(n):
             s = Subject()
             self.subject_dict['subj-' + str(i)] = s
@@ -77,6 +68,5 @@ class SubjectsCreator(object):
         for k in self.subject_dict.keys():
             self.subject_dict[k].build_knowledge_graph()    
             
-        self.logger.info("subjects created")
         
         return self.subject_dict

@@ -4,6 +4,7 @@ Created on Oct 30, 2014
 @author: alessioferrari
 '''
 import csv
+import logging
 import os
 
 FLOAT = 'FLOAT'
@@ -30,3 +31,13 @@ def read_dict_from_csv(file_path, data_type):
 def create_folder(input_path):
     if not os.path.exists(input_path):
         os.makedirs(input_path) 
+        
+        
+def start_logger(name, file_path):
+        logger = logging.getLogger(name) 
+        hdlr = logging.FileHandler(file_path, mode="w")
+        formatter = logging.Formatter('%(asctime)s %(levelname)s %(message)s')
+        hdlr.setFormatter(formatter)
+        logger.addHandler(hdlr) 
+        logger.setLevel(logging.INFO)
+        return logger 
